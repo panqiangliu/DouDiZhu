@@ -19,7 +19,7 @@ public class GameCtrl : MonoBehaviour
     {
         multiples = 1;
         baseScore = 100;
-        InitManu();
+        InitMenu();
     }
 
     public int Multiples
@@ -31,19 +31,15 @@ public class GameCtrl : MonoBehaviour
     /// <summary>
     /// 初始化面板显示
     /// </summary>
-    public void InitManu()
+    public void InitMenu()
     {
         GameObject go = Resources.Load("Prefabs/StartPanel") as GameObject;
         if (go != null)
         {
             Transform startView = Instantiate(go).transform;
             startView.SetParent(root);
-            //RectTransform rt =  startView.GetComponent<RectTransform>();
-            //rt.SetInsetAndSizeFromParentEdge()
-            //rt.anchorMin = new Vector2(0, 0);
-            //rt.anchorMax = new Vector2(1, 1);
-
             startView.localPosition = Vector3.zero;
+            startView.gameObject.AddComponent<Menu>();
         }
     }
 

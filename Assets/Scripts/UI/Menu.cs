@@ -17,7 +17,9 @@ public class Menu : MonoBehaviour
 
     private void StartEsayGame()
     {
-        //gameCtrl
+        gameCtrl.InitInteraction();
+        gameCtrl.InitScene();
+        Destroy(this.gameObject);
     }
 
     private void StartNormalGame()

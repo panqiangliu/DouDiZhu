@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public class GameCtrl : MonoBehaviour
         get { return multiples; }
     }
 
+
     /// <summary>
     /// 初始化面板显示
     /// </summary>
@@ -43,4 +45,16 @@ public class GameCtrl : MonoBehaviour
         }
     }
 
+    public void InitInteraction()
+    {
+        GameObject go = Resources.Load("Prefabs/InteractionPanel") as GameObject;
+        go.transform.SetParent(root);
+        go.name = go.name.Replace("(Clone)","");
+        go.AddComponent<InteractionPanel>();
+    }
+    
+    public  void InitScene()
+    {
+
+    }
 }

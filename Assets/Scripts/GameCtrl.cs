@@ -7,7 +7,7 @@ public class GameCtrl : MonoBehaviour
 {
 
     public int baseScore; //底粉
-    public int multiples; //全场倍数
+    private int multiples; //全场倍数
     private Transform root;
 
     void Awake()
@@ -47,12 +47,15 @@ public class GameCtrl : MonoBehaviour
 
     public void InitInteraction()
     {
-        GameObject go = Resources.Load("Prefabs/InteractionPanel") as GameObject;
+        GameObject go =Instantiate(Resources.Load("Prefabs/InteractionPanel")) as GameObject;
         go.transform.SetParent(root);
         go.name = go.name.Replace("(Clone)","");
         go.AddComponent<InteractionPanel>();
     }
     
+    /// <summary>
+    /// 初始化场景数据在界面中显示出来
+    /// </summary>
     public  void InitScene()
     {
 

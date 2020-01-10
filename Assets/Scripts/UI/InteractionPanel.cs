@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DisallowMultipleComponent]
 public class InteractionPanel : MonoBehaviour 
 {
 	private GameObject deal;

@@ -24,7 +24,10 @@ public class Menu : MonoBehaviour
 
     private void StartNormalGame()
     {
-        throw new NotImplementedException();
+        gameCtrl.Multiples = 2;
+        gameCtrl.InitInteraction();
+        gameCtrl.InitScene();
+        Destroy(this.gameObject);
     }
 
 

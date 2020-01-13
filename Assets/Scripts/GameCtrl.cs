@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameCtrl : MonoBehaviour
@@ -58,6 +59,15 @@ public class GameCtrl : MonoBehaviour
     /// </summary>
     public  void InitScene()
     {
-
+        string fileName ="";
+        if(Application.platform ==RuntimePlatform.Android)
+        {
+            fileName = Application.persistentDataPath;
+        }
+        else
+        {
+            fileName = Application.dataPath;
+        }
+        FileInfo info = new FileInfo(fileName+@"\data.json");
     }
 }

@@ -69,5 +69,24 @@ public class GameCtrl : MonoBehaviour
             fileName = Application.dataPath;
         }
         FileInfo info = new FileInfo(fileName+@"\data.json");
+        GameObject bgPanel = Instantiate(Resources.Load("BackgroundPanel")as GameObject);
+        bgPanel.transform.SetParent(root);
+        bgPanel.transform.SetAsFirstSibling();
+        bgPanel.name=bgPanel.transform.name.Replace("(Clone)","");
+
+        //记录玩家数据
+        GameObject scene = Instantiate(Resources.Load("ScenePanel") as GameObject);
+        GameObject player = scene.transform.Find("Player").gameObject;
+        HandCards playerCard = player.AddComponent<HandCards>();
+        playerCard.cType = CharacterType.Player;
+        player.AddComponent<PlayCard>();
+
+        //生成电脑玩家1 数据
+        GameObject computerOne = scene.transform.Find("ComputerOne").gameObject;
+        HandCards computerOneCard = player.AddComponent<HandCards>();
+        computerOneCard.cType = CharacterType.ComputerOne;
+        computerOne.AddComponent<SimpleSmartCard>();
+
+
     }
 }

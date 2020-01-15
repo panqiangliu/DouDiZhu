@@ -86,7 +86,12 @@ public class GameCtrl : MonoBehaviour
         HandCards computerOneCard = player.AddComponent<HandCards>();
         computerOneCard.cType = CharacterType.ComputerOne;
         computerOne.AddComponent<SimpleSmartCard>();
+        computerOne.transform.Find("Text_Notice").gameObject.SetActive(false);
 
-
+        GameObject computerTwo = scene.transform.Find("ComputerOne").gameObject;
+        HandCards computerTwoCard = player.AddComponent<HandCards>();
+        computerOneCard.cType = CharacterType.ComputerTwo;
+        computerTwo.AddComponent<SimpleSmartCard>();
+        computerTwo.transform.Find("Text_Notice").gameObject.SetActive(false);
     }
 }

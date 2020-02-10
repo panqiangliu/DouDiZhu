@@ -10,3 +10,18 @@ public enum CharacterType
 	ComputerTwo = 3,
 	Desk = 4 
 }
+
+public enum Identity
+{
+	Farmer,
+	Landlord
+}
+
+
+[SerializeField]
+public class GameData
+{   
+	public int playerIntegration;
+    public int computerOneIntegration;
+    public int computerTwoIntegration;
+}

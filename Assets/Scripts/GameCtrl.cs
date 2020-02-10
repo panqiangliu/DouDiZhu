@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameCtrl : MonoBehaviour
 {
 
-    public int baseScore; //底粉
+    public int baseScore; //底分
     private int multiples; //全场倍数
     private Transform root;
 
@@ -50,6 +52,7 @@ public class GameCtrl : MonoBehaviour
     {
         GameObject go =Instantiate(Resources.Load("Prefabs/InteractionPanel")) as GameObject;
         go.transform.SetParent(root);
+        go.transform.localPosition = Vector2.zero;
         go.name = go.name.Replace("(Clone)","");
         go.AddComponent<InteractionPanel>();
     }
@@ -69,13 +72,16 @@ public class GameCtrl : MonoBehaviour
             fileName = Application.dataPath;
         }
         FileInfo info = new FileInfo(fileName+@"\data.json");
-        GameObject bgPanel = Instantiate(Resources.Load("BackgroundPanel")as GameObject);
+        GameObject bgPanel = Instantiate(Resources.Load("Prefabs/BackgroundPanel")as GameObject);
         bgPanel.transform.SetParent(root);
+        bgPanel.transform.localPosition = Vector3.zero;
         bgPanel.transform.SetAsFirstSibling();
         bgPanel.name=bgPanel.transform.name.Replace("(Clone)","");
 
         //记录玩家数据
-        GameObject scene = Instantiate(Resources.Load("ScenePanel") as GameObject);
+        GameObject scene = Instantiate(Resources.Load("Prefabs/ScenePanel") as GameObject);
+        scene.transform.SetParent(root);
+        scene.transform.localPosition = Vector3.zero;
         GameObject player = scene.transform.Find("Player").gameObject;
         HandCards playerCard = player.AddComponent<HandCards>();
         playerCard.cType = CharacterType.Player;
@@ -83,15 +89,62 @@ public class GameCtrl : MonoBehaviour
 
         //生成电脑玩家1 数据
         GameObject computerOne = scene.transform.Find("ComputerOne").gameObject;
-        HandCards computerOneCard = player.AddComponent<HandCards>();
+        HandCards computerOneCard = computerOne.AddComponent<HandCards>();
         computerOneCard.cType = CharacterType.ComputerOne;
         computerOne.AddComponent<SimpleSmartCard>();
         computerOne.transform.Find("Text_Notice").gameObject.SetActive(false);
 
-        GameObject computerTwo = scene.transform.Find("ComputerOne").gameObject;
-        HandCards computerTwoCard = player.AddComponent<HandCards>();
-        computerOneCard.cType = CharacterType.ComputerTwo;
+        //生成电脑玩家2 数据
+        GameObject computerTwo = scene.transform.Find("ComputerTwo").gameObject;
+        HandCards computerTwoCard = computerTwo.AddComponent<HandCards>();
+        computerTwoCard.cType = CharacterType.ComputerTwo;
         computerTwo.AddComponent<SimpleSmartCard>();
         computerTwo.transform.Find("Text_Notice").gameObject.SetActive(false);
+
+        GameObject desk = scene.transform.Find("Desk").gameObject;
+        desk.transform.Find("Text_Notice").gameObject.SetActive(false);
+
+        if(!info.Exists)
+        {
+            playerCard.Integration = 1000;
+            computerOneCard.Integration = 1000;
+            computerTwoCard.Integration =1000;
+        }
+        else
+        {
+            GameData data = GetDataWithoutBOM(fileName);
+
+            playerCard.Integration = data.playerIntegration;
+            computerOneCard.Integration = data.computerOneIntegration;
+            computerTwoCard.Integration = data.computerTwoIntegration;
+        }
+        GameCtrl.UpdateIntegration(CharacterType.Player);
+        GameCtrl.UpdateIntegration(CharacterType.ComputerOne);
+        GameCtrl.UpdateIntegration(CharacterType.ComputerTwo);
+    }
+
+    private static void UpdateIntegration(CharacterType type)
+    {
+        int integration = GameObject.Find(type.ToString()).gameObject.GetComponent<HandCards>().Integration;
+        GameObject obj = GameObject.Find(type.ToString()).transform.Find("Text_Score").gameObject;
+        obj.GetComponent<Text>().text = "积分:" + integration;
+    }
+
+    /// <summary>
+    /// 跳过utf-8 xml BOM的方法
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    private GameData GetDataWithoutBOM(string fileName)
+    {
+        GameData data = new GameData();
+        Stream stream = new FileStream(fileName + @"\data.json", FileMode.Open, FileAccess.Read, FileShare.None);
+        StreamReader reader = new StreamReader(stream,true);//true 跳过bom
+
+        XmlSerializer xmlSerializer = new XmlSerializer(data.GetType());
+        data = xmlSerializer.Deserialize(reader) as GameData;
+        reader.Close();
+
+        return data;
     }
 }
